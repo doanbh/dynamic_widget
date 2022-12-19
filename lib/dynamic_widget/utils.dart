@@ -4,6 +4,8 @@ import 'package:dynamic_widget/dynamic_widget.dart';
 import 'package:dynamic_widget/dynamic_widget/drop_cap_text.dart';
 import 'package:flutter/widgets.dart';
 
+import 'basic/container_widget_parser.dart';
+
 TextAlign parseTextAlign(String? textAlignString) {
   //left the system decide
   TextAlign textAlign = TextAlign.start;
@@ -1193,3 +1195,62 @@ Radius parseRadius(String radius) {
     return Radius.zero;
   }
 }
+
+// box decoration
+BoxDecorationCustom? parseBoxDecoration(Map<String, dynamic>? map) {
+  if (map == null) {
+    return null;
+  }
+  //TODO: more properties need to be implemented, such as decorationColor, decorationStyle, wordSpacing and so on.
+  String? color = map['color'];
+  String? shape = map['shape'];
+  String? borderRadius = map['borderRadius'];
+
+  return BoxDecorationCustom(
+    color: parseHexColor(color),
+    shape: parseBoxDecorationShape(shape),
+    borderRadius: parseBorderRadius(borderRadius ?? '0'),
+  );
+}
+
+BoxShape parseBoxDecorationShape(String? textDecorationString) {
+  BoxShape textDecoration = BoxShape.rectangle;
+  switch (textDecorationString) {
+    case "circle":
+      textDecoration = BoxShape.circle;
+      break;
+    default:
+      textDecoration = BoxShape.rectangle;
+  }
+  return textDecoration;
+}
+
+Map<String, dynamic>? exportBoxDecoration(BoxDecorationCustom? boxDecoration) {
+  if (boxDecoration == null) {
+    return null;
+  }
+
+  return <String, dynamic>{
+    "color": boxDecoration.color != null
+        ? boxDecoration.color!.value.toRadixString(16)
+        : null,
+    "shape": exportBoxDecorationShape(boxDecoration.shape),
+    // "borderRadius": boxDecoration.borderRadius != null ? exportBorderRadius(boxDecoration.borderRadius!) : null,
+  };
+}
+
+String? exportBoxDecorationShape(BoxShape? mode) {
+  if (mode == null) {
+    return null;
+  }
+
+  switch (mode) {
+    case BoxShape.circle:
+      return "circle";
+    case BoxShape.rectangle:
+      return "rectangle";
+    default:
+      return "rectangle";
+  }
+}
+

@@ -160,6 +160,7 @@ class DynamicWidgetBuilder {
     }
     log.warning(
         "Can't find WidgetParser for Type ${widget.runtimeType} to export.");
+    print("export: Can't find WidgetParser for Type ${widget.runtimeType} to export.");
     return null;
   }
 
